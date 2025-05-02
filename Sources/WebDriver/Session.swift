@@ -2,7 +2,7 @@ import Foundation
 
 /// Represents a session in the WebDriver protocol,
 /// which manages the lifetime of a page or app under UI automation.
-public class Session {
+public final class Session {
     public let webDriver: any WebDriver
     public let id: String
     public let capabilities: Capabilities
@@ -20,8 +20,9 @@ public class Session {
         self.shouldDelete = owned
     }
 
-    public convenience init(webDriver: any WebDriver, desiredCapabilities: Capabilities, requiredCapabilities: Capabilities? = nil) throws {
-        let response = try webDriver.send(Requests.Session_Legacy(
+    /// Initializer for Legacy Selenium JSON Protocol
+    fileprivate convenience init(webDriver: any WebDriver, desiredCapabilities: Capabilities, requiredCapabilities: Capabilities?) throws {
+        let response = try webDriver.send(Requests.LegacySelenium.Session(
             desiredCapabilities: desiredCapabilities, requiredCapabilities: requiredCapabilities))
         self.init(
             webDriver: webDriver,
@@ -30,14 +31,36 @@ public class Session {
             owned: true)
     }
 
-    public static func createW3C(webDriver: any WebDriver, alwaysMatch: Capabilities, firstMatch: [Capabilities] = []) throws -> Session {
-        let response = try webDriver.send(Requests.Session_W3C(
+    /// Initializer for W3C Protocol
+    fileprivate convenience init(webDriver: any WebDriver, alwaysMatch: Capabilities, firstMatch: [Capabilities]) throws {
+        let response = try webDriver.send(Requests.W3C.Session(
             alwaysMatch: alwaysMatch, firstMatch: firstMatch))
-        return Session(
+        self.init(
             webDriver: webDriver,
             existingId: response.value.sessionId,
             capabilities: response.value.capabilities,
             owned: true)
+    }
+
+    public convenience init(webDriver: any WebDriver, capabilities: Capabilities) throws {
+        switch webDriver.wireProtocol {
+            case .legacySelenium:
+                try self.init(webDriver: webDriver, desiredCapabilities: capabilities, requiredCapabilities: capabilities)
+            case .w3c:
+                try self.init(webDriver: webDriver, alwaysMatch: capabilities, firstMatch: [])
+        }
+    }
+
+    public enum LegacySelenium {
+        public static func create(webDriver: any WebDriver, desiredCapabilities: Capabilities, requiredCapabilities: Capabilities? = nil) throws -> Session {
+            try Session(webDriver: webDriver, desiredCapabilities: desiredCapabilities, requiredCapabilities: requiredCapabilities)
+        }
+    }
+
+    public enum W3C {
+        public static func create(webDriver: any WebDriver, alwaysMatch: Capabilities, firstMatch: [Capabilities] = []) throws -> Session {
+            try Session(webDriver: webDriver, alwaysMatch: alwaysMatch, firstMatch: firstMatch)
+        }
     }
 
     /// The amount of time the driver should implicitly wait when searching for elements.
