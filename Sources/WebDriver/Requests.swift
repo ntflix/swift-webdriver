@@ -306,6 +306,28 @@ public enum Requests {
         }
     }
 
+    // https://www.w3.org/TR/webdriver/#set-window-rect
+    public struct SessionWindowRect: Request {
+        public var session: String
+        public var x: Int?
+        public var y: Int?
+        public var width: Int?
+        public var height: Int?
+
+        public var pathComponents: [String] { ["session", session, "window", "rect"] }
+        public var method: HTTPMethod { .post }
+        public var body: Body { .init(x: x, y: y, width: width, height: height) }
+
+        public struct Body: Codable {
+            public var x: Int?
+            public var y: Int?
+            public var width: Int?
+            public var height: Int?
+        }
+
+        public typealias Response = ResponseWithValue<Body>
+    }
+
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidrefresh
     public struct SessionRefresh: Request {
         public var session: String

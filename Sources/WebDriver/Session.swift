@@ -268,6 +268,20 @@ public final class Session {
             session: id, element: element?.id, xOffset: xOffset, yOffset: yOffset))
     }
 
+    /// Alters the size and the position of the operating system window corresponding to
+    /// session's current top-level browsing context. If x and y are both present, the
+    /// window is moved to that location. If width and height are both present, the window
+    /// (including all external chrome) is resized as close as possible to those dimensions
+    /// (though not larger than the screen, smaller than the smallest possible window size, etc...).
+    /// - Parameter x: the screenX attribute of the window object
+    /// - Parameter y: the screenY attribute of the window object
+    /// - Parameter width: the width of the outer dimensions of the top-level browsing context
+    /// - Parameter height: the height of the outer dimensions of the top-level browsing context
+    public func setWindowRect(x: Int?, y: Int?, width: Int?, height: Int?) throws {
+        try webDriver.send(Requests.SessionWindowRect(
+            session: id, x: x, y: y, width: width, height: height))
+    }
+
     /// Presses down one of the mouse buttons.
     /// - Parameter button: The button to be pressed.
     public func buttonDown(button: MouseButton = .left) throws {
