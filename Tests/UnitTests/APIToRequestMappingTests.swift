@@ -303,7 +303,7 @@ class APIToRequestMappingTests: XCTestCase {
         let mockWebDriver: MockWebDriver = MockWebDriver(wireProtocol: .legacySelenium)
         let session = Session(webDriver: mockWebDriver, existingId: "mySession")
 
-        mockWebDriver.expect(path: "session/mySession/window_handle", method: .get, type: Requests.SessionWindowHandle.self) {
+        mockWebDriver.expect(path: "session/mySession/window", method: .get, type: Requests.SessionWindowHandle.self) {
             ResponseWithValue(.init("myWindow"))
         }
         XCTAssert(try session.windowHandle == "myWindow")
@@ -314,7 +314,7 @@ class APIToRequestMappingTests: XCTestCase {
         let mockWebDriver: MockWebDriver = MockWebDriver(wireProtocol: .legacySelenium)
         let session = Session(webDriver: mockWebDriver, existingId: "mySession")
         
-        mockWebDriver.expect(path: "session/mySession/window_handles", method: .get, type: Requests.SessionWindowHandles.self) {
+        mockWebDriver.expect(path: "session/mySession/window/handles", method: .get, type: Requests.SessionWindowHandles.self) {
             ResponseWithValue(.init(["myWindow", "myWindow"]))
         }
         XCTAssert(try session.windowHandles == ["myWindow", "myWindow"])

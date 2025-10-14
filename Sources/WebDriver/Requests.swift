@@ -675,20 +675,21 @@ public enum Requests {
         public var method: HTTPMethod { .post }
     }
 
-    // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidwindow_handle
+    // https://www.w3.org/TR/webdriver/#get-window-handle
     public struct SessionWindowHandle: Request {
         public var session: String 
 
-        public var pathComponents: [String] { ["session", session, "window_handle"] }
+        public var pathComponents: [String] { ["session", session, "window"] }
         public var method: HTTPMethod { .get }
 
         public typealias Response = ResponseWithValue<String>
     }
 
+    // https://www.w3.org/TR/webdriver/#get-window-handles
     public struct SessionWindowHandles: Request {
         public var session: String 
 
-        public var pathComponents: [String] { ["session", session, "window_handles"] }
+        public var pathComponents: [String] { ["session", session, "window", "handles"] }
         public var method: HTTPMethod { .get }
 
         public typealias Response = ResponseWithValue<Array<String>>
