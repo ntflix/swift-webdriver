@@ -44,6 +44,7 @@ Contributions to expand support to unimplemented functionality are always welcom
 | POST   | `/session/:sessionId/location`                      | Supported    | `Session.setLocation`|
 | GET    | `/session/:sessionId/location`                      | Supported    | `Session.location`|
 | POST   | `/session/:sessionId/moveto`                        | Supported    | `Session.moveTo()`  |
+| POST   | `/session/:sessionId/window/rect`                   | Supported    | `Session.setWindowRect()` |
 | GET    | `/session/:sessionId/orientation`                   | Supported    | `Session.orientation`|
 | POST   | `/session/:sessionId/refresh`                       | Not supported| `Session.refresh()` |
 | GET    | `/session/:sessionId/screenshot`                    | Supported    | `Session.screenshot()`|
