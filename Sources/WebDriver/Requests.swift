@@ -38,7 +38,9 @@ public enum Requests {
         public var element: String
         public var attribute: String
 
-        public var pathComponents: [String] { ["session", session, "element", element, "attribute", attribute] }
+        public var pathComponents: [String] {
+            ["session", session, "element", element, "attribute", attribute]
+        }
         public var method: HTTPMethod { .get }
 
         public typealias Response = ResponseWithValue<String>
@@ -67,7 +69,9 @@ public enum Requests {
         public var session: String
         public var element: String
 
-        public var pathComponents: [String] { ["session", session, "element", element, "displayed"] }
+        public var pathComponents: [String] {
+            ["session", session, "element", element, "displayed"]
+        }
         public var method: HTTPMethod { .get }
 
         // Override the whole Response struct instead of just ResponseValue
@@ -95,10 +99,12 @@ public enum Requests {
     public struct ElementSelected: Request {
         public var session: String
         public var element: String
-        
-        public var pathComponents: [String] { ["session", session, "element", element, "selected"] }
+
+        public var pathComponents: [String] {
+            ["session", session, "element", element, "selected"]
+        }
         public var method: HTTPMethod { .get }
-        
+
         public struct Response: Codable {
             public var value: Bool
         }
@@ -125,7 +131,9 @@ public enum Requests {
         public var session: String
         public var element: String
 
-        public var pathComponents: [String] { ["session", session, "element", element, "location"] }
+        public var pathComponents: [String] {
+            ["session", session, "element", element, "location"]
+        }
         public var method: HTTPMethod { .get }
 
         public typealias Response = ResponseWithValue<ResponseValue>
@@ -461,15 +469,17 @@ public enum Requests {
         }
     }
 
-    // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidexecute
-    // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidexecute_async
+    // https://www.w3.org/TR/webdriver/#execute-script
+    // https://www.w3.org/TR/webdriver/#execute-async-script
     public struct SessionScript: Request {
         public var session: String
         public var script: String
         public var args: [String]
         public var async: Bool
 
-        public var pathComponents: [String] { ["session", session, async ? "execute_async" : "execute"] }
+        public var pathComponents: [String] {
+            ["session", session, async ? "execute/async" : "execute/sync"]
+        }
         public var method: HTTPMethod { .post }
         public var body: Body { .init(script: script, args: args) }
         public struct Body: Codable {
@@ -477,7 +487,7 @@ public enum Requests {
             public var args: [String]
         }
     }
-    
+
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidwindow
     public enum SessionWindow {
         public struct Post: Request {
@@ -515,7 +525,9 @@ public enum Requests {
             public var width: Double
             public var height: Double
 
-            public var pathComponents: [String] { ["session", session, "window", windowHandle, "size"] }
+            public var pathComponents: [String] {
+                ["session", session, "window", windowHandle, "size"]
+            }
             public var method: HTTPMethod { .post }
             public var body: Body { .init(width: width, height: height) }
 
@@ -529,7 +541,9 @@ public enum Requests {
             public var session: String
             public var windowHandle: String
 
-            public var pathComponents: [String] { ["session", session, "window", windowHandle, "size"] }
+            public var pathComponents: [String] {
+                ["session", session, "window", windowHandle, "size"]
+            }
             public var method: HTTPMethod { .get }
 
             public typealias Response = ResponseWithValue<ResponseValue>
@@ -539,11 +553,11 @@ public enum Requests {
             }
         }
     }
-  
+
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidtouchdoubleclick
     public struct SessionTouchDoubleClick: Request {
         public var session: String
-        public var element: String 
+        public var element: String
 
         public var pathComponents: [String] { ["session", session, "touch", "doubleclick"] }
         public var method: HTTPMethod { .post }
@@ -556,7 +570,7 @@ public enum Requests {
 
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidtouchflick
     public struct SessionTouchFlickElement: Request {
-        public var session: String 
+        public var session: String
         public var element: String
         public var xOffset: Double
         public var yOffset: Double
@@ -581,14 +595,14 @@ public enum Requests {
 
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidtouchflick-1
     public struct SessionTouchFlick: Request {
-        public var session: String 
+        public var session: String
         public var xSpeed: Double
         public var ySpeed: Double
-        
+
         public var pathComponents: [String] { ["session", session, "touch", "flick"] }
         public var method: HTTPMethod { .post }
         public var body: Body { .init(xSpeed: xSpeed, ySpeed: ySpeed) }
-        
+
         public struct Body: Codable {
             public var xSpeed: Double
             public var ySpeed: Double
@@ -613,9 +627,9 @@ public enum Requests {
 
         public struct Get: Request {
             public var session: String
-            
+
             public var pathComponents: [String] { ["session", session, "location"] }
-            public var method: HTTPMethod {.get}
+            public var method: HTTPMethod { .get }
 
             public typealias Response = ResponseWithValue<Location>
         }
@@ -623,7 +637,7 @@ public enum Requests {
 
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidsource
     public struct SessionSource: Request {
-        public var session: String 
+        public var session: String
 
         public var pathComponents: [String] { ["session", session, "source"] }
         public var method: HTTPMethod { .get }
@@ -631,7 +645,7 @@ public enum Requests {
         public typealias Response = ResponseWithValue<String>
     }
 
-     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidorientation
+    // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidorientation
     public enum SessionOrientation {
         public struct Post: Request {
             public var session: String
@@ -662,9 +676,11 @@ public enum Requests {
             public var session: String
             public var windowHandle: String
             public var x: Double
-            public var y: Double 
+            public var y: Double
 
-            public var pathComponents: [String] { ["session", session, "window", windowHandle, "position"] }
+            public var pathComponents: [String] {
+                ["session", session, "window", windowHandle, "position"]
+            }
             public var method: HTTPMethod { .post }
             public var body: Body { .init(x: x, y: y) }
 
@@ -678,7 +694,9 @@ public enum Requests {
             public var session: String
             public var windowHandle: String
 
-            public var pathComponents: [String] { ["session", session, "window", windowHandle, "position"] }
+            public var pathComponents: [String] {
+                ["session", session, "window", windowHandle, "position"]
+            }
             public var method: HTTPMethod { .get }
 
             public typealias Response = ResponseWithValue<ResponseValue>
@@ -691,15 +709,17 @@ public enum Requests {
 
     public struct WindowMaximize: Request {
         public var session: String
-        public var windowHandle: String 
+        public var windowHandle: String
 
-        public var pathComponents: [String] { ["session", session, "window", windowHandle, "maximize"] }
+        public var pathComponents: [String] {
+            ["session", session, "window", windowHandle, "maximize"]
+        }
         public var method: HTTPMethod { .post }
     }
 
     // https://www.w3.org/TR/webdriver/#get-window-handle
     public struct SessionWindowHandle: Request {
-        public var session: String 
+        public var session: String
 
         public var pathComponents: [String] { ["session", session, "window"] }
         public var method: HTTPMethod { .get }
@@ -709,11 +729,11 @@ public enum Requests {
 
     // https://www.w3.org/TR/webdriver/#get-window-handles
     public struct SessionWindowHandles: Request {
-        public var session: String 
+        public var session: String
 
         public var pathComponents: [String] { ["session", session, "window", "handles"] }
         public var method: HTTPMethod { .get }
 
-        public typealias Response = ResponseWithValue<Array<String>>
+        public typealias Response = ResponseWithValue<[String]>
     }
 }
