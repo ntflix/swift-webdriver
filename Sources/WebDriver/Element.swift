@@ -119,7 +119,7 @@ public struct Element {
     /// - Parameter keys: A key sequence according to the WebDriver spec.
     public func sendKeys(_ keys: Keys) throws {
         try webDriver.send(Requests.ElementValue(
-            session: session.id, element: id, value: [keys.rawValue]))
+            session: session.id, element: id, text: keys.rawValue))
     }
 
     /// Clears the text of an editable element.

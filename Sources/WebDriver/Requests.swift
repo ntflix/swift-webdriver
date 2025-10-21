@@ -110,19 +110,19 @@ public enum Requests {
         }
     }
 
-    // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidelementidvalue
+    // https://www.w3.org/TR/webdriver/#element-send-keys
     public struct ElementValue: Request {
         public var session: String
         public var element: String
-        public var value: [String]
+        public var text: String
 
         public var pathComponents: [String] { ["session", session, "element", element, "value"] }
 
         public var method: HTTPMethod { .post }
-        public var body: Body { .init(value: value) }
+        public var body: Body { .init(text: text) }
 
         public struct Body: Codable {
-            public var value: [String]
+            public var text: String
         }
     }
 
