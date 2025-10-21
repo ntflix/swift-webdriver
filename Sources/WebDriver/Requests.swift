@@ -357,16 +357,18 @@ public enum Requests {
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidtimeouts
     public struct SessionTimeouts: Request {
         public var session: String
-        public var type: TimeoutType
-        public var ms: Double
+        public var script: Double?
+        public var pageLoad: Double?
+        public var implicit: Double?
 
         public var pathComponents: [String] { ["session", session, "timeouts"] }
         public var method: HTTPMethod { .post }
-        public var body: Body { .init(type: type, ms: ms) }
+        public var body: Body { .init(script: script, pageLoad: pageLoad, implicit: implicit) }
 
         public struct Body: Codable {
-            public var type: TimeoutType
-            public var ms: Double
+            public var script: Double?
+            public var pageLoad: Double?
+            public var implicit: Double?
         }
     }
 
