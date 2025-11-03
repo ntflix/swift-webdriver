@@ -1,4 +1,4 @@
-public protocol WebDriver {
+public protocol WebDriver: Sendable {
     /// The protocol supported by the WebDriver server.
     var wireProtocol: WireProtocol { get }
 
