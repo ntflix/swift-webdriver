@@ -1,6 +1,7 @@
 import Foundation
+
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+    import FoundationNetworking
 #endif
 
 extension URLSession {
@@ -8,7 +9,8 @@ extension URLSession {
         with request: URLRequest,
         _ completion: @escaping (Result<(Data, HTTPURLResponse), Error>) -> Void
     )
-        -> URLSessionDataTask {
+        -> URLSessionDataTask
+    {
         dataTask(with: request) { data, response, error in
             if let error {
                 completion(.failure(error))
@@ -22,22 +24,20 @@ extension URLSession {
 }
 
 extension URLRequest {
-    func send() throws -> (Int, Data) {
-        var result: Result<(Data, HTTPURLResponse), Error> =
-            .failure(NSError(domain: NSURLErrorDomain, code: URLError.unknown.rawValue))
-        let semaphore: DispatchSemaphore = .init(value: 0)
-        let task = URLSession.shared.dataTask(with: self) {
-            result = $0
-            semaphore.signal()
-        }
-        task.resume()
-        semaphore.wait()
+    private static let customSession: URLSession = {
+        let config = URLSessionConfiguration.default
+        config.httpMaximumConnectionsPerHost = 20
+        config.timeoutIntervalForRequest = 30
+        return URLSession(configuration: config)
+    }()
 
-        switch result {
-        case let .failure(error):
-            throw error
-        case let .success((data, response)):
-            return (statusCode: response.statusCode, data)
+    func send() async throws -> (Int, Data) {
+        let (data, response) = try await Self.customSession.data(for: self)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
         }
+
+        return (httpResponse.statusCode, data)
     }
 }

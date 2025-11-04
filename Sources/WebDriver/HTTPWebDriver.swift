@@ -18,17 +18,17 @@ public struct HTTPWebDriver: WebDriver {
         self.wireProtocol = wireProtocol
     }
 
-    public static func createWithDetectedProtocol(serverURL: URL) throws -> HTTPWebDriver {
-        .init(endpoint: serverURL, wireProtocol: try detectProtocol(serverURL: serverURL))
+    public static func createWithDetectedProtocol(serverURL: URL) async throws -> HTTPWebDriver {
+        .init(endpoint: serverURL, wireProtocol: try await detectProtocol(serverURL: serverURL))
     }
 
-    public static func detectProtocol(serverURL: URL) throws -> WireProtocol {
+    public static func detectProtocol(serverURL: URL) async throws -> WireProtocol {
         // The status request is the same for the Selenium Legacy JSON protocol and W3C,
         // but the response format is different.
         let urlRequest = try Self.buildURLRequest(serverURL: serverURL, Requests.LegacySelenium.Status())
 
         // Send the request and decode result or error
-        let (status, responseData) = try urlRequest.send()
+        let (status, responseData) = try await urlRequest.send()
         guard status == 200 else {
             throw try JSONDecoder().decode(ErrorResponse.self, from: responseData)
         }
@@ -43,11 +43,11 @@ public struct HTTPWebDriver: WebDriver {
     }
 
     @discardableResult
-    public func send<Req: Request>(_ request: Req) throws -> Req.Response {
+    public func send<Req: Request>(_ request: Req) async throws -> Req.Response {
         let urlRequest = try Self.buildURLRequest(serverURL: self.serverURL, request)
 
         // Send the request and decode result or error
-        let (status, responseData) = try urlRequest.send()
+        let (status, responseData) = try await urlRequest.send()
         guard status == 200 else {
             throw try JSONDecoder().decode(ErrorResponse.self, from: responseData)
         }
