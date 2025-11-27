@@ -1,12 +1,11 @@
 extension Capabilities {
     /// Firefox-specific capabilities.
-    open class FirefoxOptions: Codable {
+    open class FirefoxOptions: BrowserSpecificOptions {
         public var binary: String? = nil
-
-        public init() {}
 
         private enum CodingKeys: String, CodingKey {
             case binary
+            case args
         }
     }
 }

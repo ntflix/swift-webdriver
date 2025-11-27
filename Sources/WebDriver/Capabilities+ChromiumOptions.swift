@@ -1,12 +1,11 @@
 extension Capabilities {
     /// Chromium-specific capabilities.
-    open class ChromiumOptions: Codable {
+    open class ChromiumOptions: BrowserSpecificOptions {
         public var binary: String? = nil
-
-        public init() {}
 
         private enum CodingKeys: String, CodingKey {
             case binary
+            case args
         }
     }
 }
