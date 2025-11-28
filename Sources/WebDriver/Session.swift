@@ -481,7 +481,7 @@ public final class Session {
                 try await webDriver.send(request)
                 return .success(())
             } catch let error as ErrorResponse
-                where webDriver.isInconclusiveInteraction(error: error.status)
+                where webDriver.isInconclusiveInteraction(error: error.status ?? .unknownError)
             {
                 // Return instead of throwing to indicate that `poll` can retry as needed.
                 return .failure(error)
