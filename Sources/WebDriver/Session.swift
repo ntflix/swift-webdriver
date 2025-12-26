@@ -179,9 +179,13 @@ public final class Session {
         if let i = implicit { _implicitWaitTimeout = i }
     }
 
-    public func execute(script: String, args: [String] = [], async: Bool = false) async throws {
+    @discardableResult
+    public func execute<Result: Codable>(script: String, args: [String] = [], async: Bool = false)
+        async throws -> Result
+    {
         try await webDriver.send(
-            Requests.SessionScript(session: id, script: script, args: args, async: async))
+            Requests.SessionScript<Result>(session: id, script: script, args: args, async: async)
+        ).value
     }
 
     public func back() async throws {

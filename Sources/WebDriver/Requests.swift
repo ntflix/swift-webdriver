@@ -473,7 +473,7 @@ public enum Requests {
 
     // https://www.w3.org/TR/webdriver/#execute-script
     // https://www.w3.org/TR/webdriver/#execute-async-script
-    public struct SessionScript: Request {
+    public struct SessionScript<Result: Codable>: Request {
         public var session: String
         public var script: String
         public var args: [String]
@@ -488,6 +488,8 @@ public enum Requests {
             public var script: String
             public var args: [String]
         }
+
+        public typealias Response = ResponseWithValue<Result>
     }
 
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidwindow
