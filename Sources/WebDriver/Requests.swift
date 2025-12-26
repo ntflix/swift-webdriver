@@ -1,5 +1,9 @@
 /// Defines request and response types for the WebDriver protocol.
 public enum Requests {
+    public struct EmptyBody: Codable {
+        public init() {}
+    }
+
     public struct ResponseWithValue<Value>: Codable where Value: Codable {
         public var value: Value
 
@@ -53,6 +57,8 @@ public enum Requests {
 
         public var pathComponents: [String] { ["session", session, "element", element, "clear"] }
         public var method: HTTPMethod { .post }
+        public typealias Body = EmptyBody
+        public var body: Body { .init() }
     }
 
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidelementidclick
@@ -62,6 +68,8 @@ public enum Requests {
 
         public var pathComponents: [String] { ["session", session, "element", element, "click"] }
         public var method: HTTPMethod { .post }
+        public typealias Body = EmptyBody
+        public var body: Body { .init() }
     }
 
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidelementiddisplayed
@@ -185,6 +193,8 @@ public enum Requests {
 
         public var pathComponents: [String] { ["session", session, "back"] }
         public var method: HTTPMethod { .post }
+        public typealias Body = EmptyBody
+        public var body: Body { .init() }
     }
 
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidbuttondown
@@ -224,6 +234,8 @@ public enum Requests {
 
         public var pathComponents: [String] { ["session", session, "doubleclick"] }
         public var method: HTTPMethod { .post }
+        public typealias Body = EmptyBody
+        public var body: Body { .init() }
     }
 
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidelement
@@ -274,6 +286,8 @@ public enum Requests {
 
         public var pathComponents: [String] { ["session", session, "forward"] }
         public var method: HTTPMethod { .post }
+        public typealias Body = EmptyBody
+        public var body: Body { .init() }
     }
 
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidkeys
@@ -342,6 +356,8 @@ public enum Requests {
 
         public var pathComponents: [String] { ["session", session, "refresh"] }
         public var method: HTTPMethod { .post }
+        public typealias Body = EmptyBody
+        public var body: Body { .init() }
     }
 
     // https://www.selenium.dev/documentation/legacy/json_wire_protocol/#sessionsessionidscreenshot
@@ -719,6 +735,8 @@ public enum Requests {
             ["session", session, "window", windowHandle, "maximize"]
         }
         public var method: HTTPMethod { .post }
+        public typealias Body = EmptyBody
+        public var body: Body { .init() }
     }
 
     // https://www.w3.org/TR/webdriver/#get-window-handle
